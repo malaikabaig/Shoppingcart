@@ -1,24 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
+// import MyDrawer from './models/drawer';
+import ShoppingContent from './pages/shoppincart';
+
+// import List from '@mui/material/List';
+// import ListItem from '@mui/material/ListItem';
+// import ListItemButton from '@mui/material/ListItemButton';
+// import ListItemIcon from '@mui/material/ListItemIcon';
+// import ListItemText from '@mui/material/ListItemText';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {/* this is the page content */}
+
+      <ShoppingContent />
+    </>
   );
 }
 
