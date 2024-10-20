@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import productData from '../Utilis/products.json'; // Import your JSON data
 import MyDrawer from '../models/drawer'; // Make sure to import your MyDrawer component
+import { productImages } from '../images/images';
 
 export default function ShoppingContent() {
   const array = ['XS', 'S', 'M', 'ML', 'L', 'XL', 'XXL'];
@@ -38,6 +39,7 @@ export default function ShoppingContent() {
           container
           sx={{
             display: 'flex',
+
             flexDirection: { xs: 'column', sm: 'column', md: 'row', lg: 'row' },
           }}
         >
@@ -46,7 +48,7 @@ export default function ShoppingContent() {
             item
             xs={12}
             sm={12}
-            md={5}
+            md={2}
             lg={2}
             sx={{ mx: { xs: 10, sm: 15, md: 0, lg: 0 }, px: { md: 3, lg: 3 } }}
           >
@@ -91,7 +93,7 @@ export default function ShoppingContent() {
             item
             xs={12}
             sm={12}
-            md={7}
+            md={10}
             lg={10}
             sx={{
               mx: { xs: 5, sm: 5, md: 0, lg: 0 },
@@ -114,13 +116,59 @@ export default function ShoppingContent() {
                 <Box
                   key={product.id}
                   sx={{
-                    border: '1px solid #ddd',
+                    // border: '1px solid #ddd',
                     padding: 2,
                     borderRadius: 2,
-                    width: '200px',
+                    width: '220px',
+                    textAlign: 'center',
                   }}
                 >
-                  <Typography variant="h6">{product.title}</Typography>
+                  {/* <img
+                    src={productImages[product.image]}
+                    alt={product.title}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      objectFit: 'cover',
+                      borderRadius: '4px',
+                    }}
+                  /> */}
+
+                  <Box sx={{ position: 'relative', width: '100%' }}>
+                    {/* Product image */}
+                    <img
+                      src={productImages[product.image]}
+                      alt={product.title}
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        objectFit: 'cover',
+                        borderRadius: '4px',
+                      }}
+                    />
+
+                    {/* Free Shipping text */}
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        position: 'absolute',
+                        top: 8, // Adjust the distance from the top
+                        right: 8, // Adjust the distance from the right
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Semi-transparent background
+                        color: 'white', // Text color
+                        padding: '4px 8px', // Padding for the text box
+                        borderRadius: '4px', // Optional rounded corners
+                        fontSize: '12px', // Adjust font size if necessary
+                      }}
+                    >
+                      {product.isFreeShipping
+                        ? 'Free Shipping'
+                        : 'Shipping charges apply'}
+                    </Typography>
+                  </Box>
+                  <Typography sx={{ pt: 2 }} variant="h6">
+                    {product.title}
+                  </Typography>
                   <Typography variant="body2" color="textSecondary">
                     {product.style || 'No style available'}
                   </Typography>
@@ -128,15 +176,17 @@ export default function ShoppingContent() {
                     {product.currencyFormat}
                     {product.price}
                   </Typography>
-                  <Typography variant="body2">
-                    {product.isFreeShipping
-                      ? 'Free Shipping'
-                      : 'Shipping charges apply'}
-                  </Typography>
+
                   {/* Add to Cart button */}
                   <Button
                     variant="contained"
-                    sx={{ mt: 2 }}
+                    sx={{
+                      mt: 2,
+                      width: '100%',
+                      color: 'white',
+                      backgroundColor: 'black',
+                      height: '50px',
+                    }}
                     onClick={() => handleAddToCart(product)}
                   >
                     Add to Cart
