@@ -13,7 +13,8 @@
         "sku": 8552515751438644,
         "style": "White T-shirt",
         "title": "Cropped Stay Groovy off white",
-        "image": "four1.webp"
+        "image": "four1.webp",
+        "hoveredimage": "four2.webp"
       },
       {
         "availableSizes": ["X", "ML", "L"],
@@ -27,7 +28,8 @@
         "sku": 39876704341265610,
         "style": "Wine",
         "title": "Basic Cactus White T-shirt",
-        "image": "fifteen1.webp"
+        "image": "fifteen1.webp",
+        "hoveredimage": "ffifteen2.webp"
       },
       {
         "availableSizes": ["XL"],
@@ -41,7 +43,8 @@
         "sku": 9197907543445676,
         "style": "Tony Hawk",
         "title": "Skater Black Sweatshirt",
-        "image": "five1.webp"
+        "image": "five1.webp",
+        "hoveredimage": "five2.webp"
       },
       {
         "availableSizes": ["M", "ML"],
@@ -55,7 +58,8 @@
         "sku": 51498472915966370,
         "style": "Tule",
         "title": "Black Tule Oversized",
-        "image": "sixteen1.webp"
+        "image": "sixteen1.webp",
+        "hoveredimage": "sixteen2.webp"
       },
       {
         "availableSizes": ["S", "XS"],
@@ -69,7 +73,8 @@
         "sku": 12064273040195392,
         "style": "Really Cool T-shirt",
         "title": "Black Batman T-shirt",
-        "image": "eleven1.webp"
+        "image": "eleven1.webp",
+        "hoveredimage": "eleven2.webp"
       },
       {
         "availableSizes": ["X", "L", "XL"],
@@ -83,7 +88,8 @@
         "sku": 10686354557628304,
         "style": "Mark Zuck have 365 of this one",
         "title": "Blue T-Shirt",
-        "image": "seven1.webp"
+        "image": "seven1.webp",
+        "hoveredimage": "seven2.webp"
       },
       {
         "availableSizes": ["X", "L", "XL", "XXL"],
@@ -97,7 +103,8 @@
         "sku": 11033926921508488,
         "style": "",
         "title": "Loose Black T-shirt",
-        "image": "eight1.webp"
+        "image": "eight1.webp",
+        "hoveredimage": "eight2.webp"
       },
       {
         "availableSizes": ["X", "L", "XL", "XXL"],
@@ -111,7 +118,8 @@
         "sku": 18644119330491310,
         "style": "White T-shirt",
         "title": "Ringer Hall Pass",
-        "image": "thirteen1.webp"
+        "image": "thirteen1.webp",
+        "hoveredimage": "thirteen2.webp"
       },
       {
         "availableSizes": ["X", "L"],
@@ -125,7 +133,8 @@
         "sku": 11854078013954528,
         "style": "You will like this one",
         "title": "Grey T-shirt",
-        "image": "ten1.webp"
+        "image": "ten1.webp",
+        "hoveredimage": "ten2.webp"
       },
       {
         "availableSizes": ["X", "L"],
@@ -139,7 +148,8 @@
         "sku": 876661122392077,
         "style": "Adidas originals",
         "title": "Black T-shirt with white stripes",
-        "image": "one1.webp"
+        "image": "one1.webp",
+        "hoveredimage": "one2.webp"
       },
       {
         "availableSizes": ["X", "L", "XL"],
@@ -153,7 +163,8 @@
         "sku": 10547961582846888,
         "style": "Cowabunga!",
         "title": "Turtles Ninja T-shirt",
-        "image": "six1.webp"
+        "image": "six1.webp",
+        "hoveredimage": "six2.webp"
       },
       {
         "availableSizes": ["XL", "XXL"],
@@ -167,7 +178,8 @@
         "sku": 6090484789343891,
         "style": "When you wish well",
         "title": "Slim black T-shirt",
-        "image": "three1.webp"
+        "image": "three1.webp",
+        "hoveredimage": "three2.webp"
       },
       {
         "availableSizes": ["S"],
@@ -181,7 +193,8 @@
         "sku": 18532669286405344,
         "style": "Very comfy",
         "title": "Blue Sweatshirt",
-        "image": "twelve1.webp"
+        "image": "twelve1.webp",
+        "hoveredimage": "twelve2.webp"
       },
       {
         "availableSizes": ["XL"],
@@ -195,7 +208,8 @@
         "sku": 5619496040738316,
         "style": "Girl the future is all your",
         "title": "White T-shirt Gucci",
-        "image": "two1.webp"
+        "image": "two1.webp",
+        "hoveredimage": "two2.webp"
       },
       {
         "availableSizes": ["L", "XL"],
@@ -209,7 +223,8 @@
         "sku": 11600983276356164,
         "style": "",
         "title": "Tropical Wine T-shirt",
-        "image": "nine1.webp"
+        "image": "nine1.webp",
+        "hoveredimage": "nine2.webp"
       },
       {
         "availableSizes": ["L", "XL"],
@@ -223,7 +238,8 @@
         "sku": 27250082398145996,
         "style": "",
         "title": "Marine Blue T-shirt",
-        "image": "fourteen1.webp"
+        "image": "fourteen1.webp",
+        "hoveredimage": "fourteen2.webp"
       }
     ]
   }

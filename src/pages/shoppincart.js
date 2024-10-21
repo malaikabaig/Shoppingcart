@@ -213,47 +213,30 @@ export default function ShoppingContent() {
   const { products } = productData.data;
   const [selectedSize, setSelectedSize] = useState(null);
   const [cart, setCart] = useState([]);
+  const [hovered, setHovered] = useState(false); // Track hovered product by ID
 
-  // const handleAddToCart = (product) => {
-  //   const existingProduct = cart.find((item) => item.id === product.id);
-  //   if (existingProduct) {
-  //     setCart(
-  //       cart.map((item) =>
-  //         item.id === product.id
-  //           ? { ...item, quantity: item.quantity + 1 }
-  //           : item
-  //       )
-  //     );
-  //   } else {
-  //     setCart([...cart, { ...product, quantity: 1 }]);
-  //   }
-  // };
-
-  // Handle size selection
-
-  // Assuming the addToCart function adds items to the cart
+  // Handle Add to Cart
   const handleAddToCart = (product) => {
     setCart((prevCart) => {
-      // Check if item is already in the cart
       const itemExists = prevCart.find((item) => item.id === product.id);
-
       if (itemExists) {
-        // If item exists, update the quantity
         return prevCart.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        // If item does not exist, add it to the cart with quantity 1
         return [...prevCart, { ...product, quantity: 1 }];
       }
     });
   };
+
+  // Handle size selection
   const handleSizeSelection = (size) => {
     setSelectedSize(size);
   };
 
+  // Filter products by selected size
   const filteredProducts = selectedSize
     ? products.filter((product) =>
         product.availableSizes.includes(selectedSize)
@@ -264,17 +247,11 @@ export default function ShoppingContent() {
     <>
       <MyDrawer cart={cart} setCart={setCart} />
 
-      {/* sizes and products container */}
+      {/* Sizes and Products Container */}
       <Box sx={{ mt: 5 }}>
-        <Grid
-          container
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', sm: 'column', md: 'row', lg: 'row' },
-          }}
-        >
+        <Grid container sx={{ flexDirection: { xs: 'column', md: 'row' } }}>
           {/* Sizes Section */}
-          <Grid item xs={12} sm={12} md={2} lg={2} sx={{ pl: 5 }}>
+          <Grid item xs={12} md={2} sx={{ pl: 5 }}>
             <Typography sx={{ mb: 3 }}>Sizes :</Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
               {array.map((size, index) => (
@@ -302,7 +279,7 @@ export default function ShoppingContent() {
           </Grid>
 
           {/* Products Section */}
-          <Grid item xs={12} sm={12} md={10} lg={10} sx={{ pl: 3 }}>
+          <Grid item xs={12} md={10} sx={{ pl: 3 }}>
             <Typography sx={{ pt: 5, pl: 2 }}>
               Products found: {filteredProducts.length}
             </Typography>
@@ -316,10 +293,16 @@ export default function ShoppingContent() {
                     width: '200px',
                     textAlign: 'center',
                   }}
+                  onMouseEnter={() => setHovered(product.id)} // Set hovered product ID
+                  onMouseLeave={() => setHovered(null)} // Clear hovered product ID
                 >
                   <Box sx={{ position: 'relative' }}>
                     <img
-                      src={productImages[product.image]}
+                      src={
+                        hovered === product.id // Check if this product is hovered
+                          ? productImages[product.hoveredimage] // Use hovered image
+                          : productImages[product.image] // Use default image
+                      }
                       alt={product.title}
                       style={{
                         width: '100%',
@@ -327,6 +310,7 @@ export default function ShoppingContent() {
                         borderRadius: '4px',
                       }}
                     />
+
                     <Typography
                       variant="body2"
                       sx={{
