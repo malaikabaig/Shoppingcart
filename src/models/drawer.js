@@ -68,13 +68,17 @@ export default function MyDrawer({ cart, setCart }) {
 
   // Handle quantity decrease
   const handleDecreaseQuantity = (productId) => {
-    setCart(
-      cart.map((item) =>
-        item.id === productId && (item.quantity || 1) > 1
-          ? { ...item, quantity: (item.quantity || 1) - 1 } // Ensure quantity exists
-          : item
-      )
-    );
+    setCart((prevCart) => {
+      return prevCart
+        .map((item) => {
+          if (item.id === productId) {
+            const newQuantity = (item.quantity || 1) - 1;
+            return newQuantity > 0 ? { ...item, quantity: newQuantity } : null; // Return null if the quantity is 0
+          }
+          return item; // Keep other items as they are
+        })
+        .filter(Boolean); // Filter out null values
+    });
   };
 
   // Calculate subtotal
@@ -86,10 +90,7 @@ export default function MyDrawer({ cart, setCart }) {
   };
 
   const DrawerList = cart.map((item) => (
-    <Box
-      key={item.id}
-      sx={{ display: 'flex', alignItems: 'center', padding: 2 }}
-    >
+    <Box key={item.id} sx={{ display: 'flex', alignItems: 'center' }}>
       <img
         src={productImages[item.image]}
         alt={item.title}
@@ -100,21 +101,36 @@ export default function MyDrawer({ cart, setCart }) {
           marginRight: '16px',
         }}
       />
-      <Box sx={{ flex: 1 }}>
-        <Typography>{item.title}</Typography>
-        <Typography>
-          {item.currencyFormat}
-          {item.price}
-        </Typography>
-      </Box>
-      <Box>
-        <IconButton onClick={() => handleDecreaseQuantity(item.id)}>
-          <RemoveIcon />
-        </IconButton>
-        <Typography>{item.quantity}</Typography>
-        <IconButton onClick={() => handleIncreaseQuantity(item.id)}>
-          <AddIcon />
-        </IconButton>
+      <Box sx={{ display: 'flex', flexDirection: 'column', marginTop: 5 }}>
+        <Box>
+          <Typography>{item.title}</Typography>
+          <Typography>
+            {item.currencyFormat}
+            {item.price}
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            width: 250,
+          }}
+        >
+          <IconButton
+            size="small"
+            onClick={() => handleDecreaseQuantity(item.id)}
+          >
+            <RemoveIcon />
+          </IconButton>
+          <Typography sx={{ mt: 0.5 }}>{item.quantity}</Typography>
+          <IconButton
+            size="small"
+            onClick={() => handleIncreaseQuantity(item.id)}
+          >
+            <AddIcon />
+          </IconButton>
+        </Box>
       </Box>
     </Box>
   ));
@@ -125,9 +141,23 @@ export default function MyDrawer({ cart, setCart }) {
         <ShoppingCartIcon fontSize="large" onClick={toggleDrawer(true)} />
       </Box>
       <Drawer open={open} onClose={toggleDrawer(false)} anchor="right">
-        <Box sx={{ width: 300, padding: 2 }}>
+        <Box
+          sx={{
+            width: 300,
+            padding: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+          }}
+        >
           {DrawerList}
-          <Box sx={{ borderTop: '1px solid #ddd', paddingTop: 2 }}>
+          <Box
+            sx={{
+              borderTop: '1px solid #ddd',
+              marginTop: 'auto',
+              paddingTop: 2,
+            }}
+          >
             <Typography variant="h6">
               Subtotal: ${calculateSubtotal().toFixed(2)}
             </Typography>

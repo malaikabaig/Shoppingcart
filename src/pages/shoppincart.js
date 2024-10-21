@@ -214,23 +214,42 @@ export default function ShoppingContent() {
   const [selectedSize, setSelectedSize] = useState(null);
   const [cart, setCart] = useState([]);
 
-  // Handle Add to Cart
+  // const handleAddToCart = (product) => {
+  //   const existingProduct = cart.find((item) => item.id === product.id);
+  //   if (existingProduct) {
+  //     setCart(
+  //       cart.map((item) =>
+  //         item.id === product.id
+  //           ? { ...item, quantity: item.quantity + 1 }
+  //           : item
+  //       )
+  //     );
+  //   } else {
+  //     setCart([...cart, { ...product, quantity: 1 }]);
+  //   }
+  // };
+
+  // Handle size selection
+
+  // Assuming the addToCart function adds items to the cart
   const handleAddToCart = (product) => {
-    const existingProduct = cart.find((item) => item.id === product.id);
-    if (existingProduct) {
-      setCart(
-        cart.map((item) =>
+    setCart((prevCart) => {
+      // Check if item is already in the cart
+      const itemExists = prevCart.find((item) => item.id === product.id);
+
+      if (itemExists) {
+        // If item exists, update the quantity
+        return prevCart.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
-        )
-      );
-    } else {
-      setCart([...cart, { ...product, quantity: 1 }]);
-    }
+        );
+      } else {
+        // If item does not exist, add it to the cart with quantity 1
+        return [...prevCart, { ...product, quantity: 1 }];
+      }
+    });
   };
-
-  // Handle size selection
   const handleSizeSelection = (size) => {
     setSelectedSize(size);
   };
