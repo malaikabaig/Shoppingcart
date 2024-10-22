@@ -243,6 +243,8 @@ export default function ShoppingContent() {
       )
     : products;
 
+  console.log('hovered', hovered);
+
   return (
     <>
       <MyDrawer cart={cart} setCart={setCart} />
@@ -284,7 +286,8 @@ export default function ShoppingContent() {
               Products found: {filteredProducts.length}
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-              {filteredProducts.map((product) => (
+              {filteredProducts?.map((product) => (
+                // Inside your map function where images are being rendered
                 <Box
                   key={product.id}
                   sx={{
@@ -293,24 +296,35 @@ export default function ShoppingContent() {
                     width: '200px',
                     textAlign: 'center',
                   }}
-                  onMouseEnter={() => setHovered(product.id)} // Set hovered product ID
-                  onMouseLeave={() => setHovered(null)} // Clear hovered product ID
+                  onMouseOver={() => setHovered(product.id)}
+                  onMouseLeave={() => setHovered(null)}
                 >
+                  {/* {console.log('hoveredimage:', product.hoveredimage);
+                      console.log('image:', product.image);} */}
                   <Box sx={{ position: 'relative' }}>
-                    <img
-                      src={
-                        hovered === product.id // Check if this product is hovered
-                          ? productImages[product.hoveredimage] // Use hovered image
-                          : productImages[product.image] // Use default image
-                      }
-                      alt={product.title}
-                      style={{
-                        width: '100%',
-                        objectFit: 'cover',
-                        borderRadius: '4px',
-                      }}
-                    />
-
+                    {hovered === product.id ? (
+                      <img
+                        src={
+                          productImages[product.hoveredimage] // Use hovered image
+                        }
+                        alt={product.title}
+                        style={{
+                          width: '100%',
+                          objectFit: 'cover',
+                          borderRadius: '4px',
+                        }}
+                      />
+                    ) : (
+                      <img
+                        src={productImages[product.image]}
+                        alt={product.title}
+                        style={{
+                          width: '100%',
+                          objectFit: 'cover',
+                          borderRadius: '4px',
+                        }}
+                      />
+                    )}
                     <Typography
                       variant="body2"
                       sx={{

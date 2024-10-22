@@ -41,7 +41,14 @@
 //   );
 // }
 
-import { Box, Drawer, Button, Typography, IconButton } from '@mui/material';
+import {
+  Box,
+  Drawer,
+  Button,
+  Typography,
+  IconButton,
+  Badge,
+} from '@mui/material';
 import { useState } from 'react';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AddIcon from '@mui/icons-material/Add';
@@ -60,7 +67,7 @@ export default function MyDrawer({ cart, setCart }) {
     setCart(
       cart.map((item) =>
         item.id === productId
-          ? { ...item, quantity: (item.quantity || 1) + 1 } // Ensure quantity exists
+          ? { ...item, quantity: (item.quantity || 1) + 1 }
           : item
       )
     );
@@ -73,11 +80,11 @@ export default function MyDrawer({ cart, setCart }) {
         .map((item) => {
           if (item.id === productId) {
             const newQuantity = (item.quantity || 1) - 1;
-            return newQuantity > 0 ? { ...item, quantity: newQuantity } : null; // Return null if the quantity is 0
+            return newQuantity > 0 ? { ...item, quantity: newQuantity } : null;
           }
-          return item; // Keep other items as they are
+          return item;
         })
-        .filter(Boolean); // Filter out null values
+        .filter(Boolean);
     });
   };
 
@@ -86,11 +93,19 @@ export default function MyDrawer({ cart, setCart }) {
     return cart.reduce(
       (total, item) => total + item.price * (item.quantity || 1),
       0
-    ); // Ensure quantity exists
+    );
+  };
+
+  // Calculate total quantity of items in the cart
+  const calculateTotalQuantity = () => {
+    return cart.reduce((total, item) => total + (item.quantity || 1), 0);
   };
 
   const DrawerList = cart.map((item) => (
-    <Box key={item.id} sx={{ display: 'flex', alignItems: 'center' }}>
+    <Box
+      key={item.id}
+      sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}
+    >
       <img
         src={productImages[item.image]}
         alt={item.title}
@@ -101,7 +116,7 @@ export default function MyDrawer({ cart, setCart }) {
           marginRight: '16px',
         }}
       />
-      <Box sx={{ display: 'flex', flexDirection: 'column', marginTop: 5 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <Box>
           <Typography>{item.title}</Typography>
           <Typography>
@@ -138,7 +153,16 @@ export default function MyDrawer({ cart, setCart }) {
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', padding: 2 }}>
-        <ShoppingCartIcon fontSize="large" onClick={toggleDrawer(true)} />
+        {/* Add Badge component to show the total quantity in a superscript */}
+        <IconButton onClick={toggleDrawer(true)} aria-label="cart">
+          <Badge
+            badgeContent={calculateTotalQuantity()} // Total items in the cart
+            color="error"
+            invisible={calculateTotalQuantity() === 0} // Hide if no items in cart
+          >
+            <ShoppingCartIcon fontSize="large" />
+          </Badge>
+        </IconButton>
       </Box>
       <Drawer open={open} onClose={toggleDrawer(false)} anchor="right">
         <Box
