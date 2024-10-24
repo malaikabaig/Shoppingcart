@@ -1,11 +1,30 @@
 import React from 'react';
 import { Box, Typography, TextField, Button, Grid } from '@mui/material';
 import Header from '../models/header';
+import { useDispatch, useSelector } from 'react-redux';
+import { increment, decrement } from '../redux/reducer/reducer';
 
 export default function ContactUs() {
+  const value = useSelector((state) => state.counter.value);
+  const dispatch = useDispatch();
   return (
     <>
       <Header />
+      <Button
+        variant="outlined"
+        aria-label="Increase"
+        onClick={() => dispatch(increment())}
+      >
+        Increment
+      </Button>
+      <p>{value}</p>
+      <Button
+        variant="outlined"
+        aria-label="Decrease"
+        onClick={() => dispatch(decrement())}
+      >
+        Decrement
+      </Button>
       <Box sx={{ padding: 5 }}>
         <Typography variant="h4" gutterBottom>
           Contact Us

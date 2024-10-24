@@ -381,7 +381,6 @@ import productData from '../Utilis/products.json';
 import MyDrawer from '../models/drawer';
 import { productImages } from '../images/images';
 import Header from '../models/header';
-
 export default function ShoppingContent() {
   const array = ['XS', 'S', 'M', 'ML', 'L', 'XL', 'XXL'];
   const { products } = productData.data;

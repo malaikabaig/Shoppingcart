@@ -1,46 +1,3 @@
-// import { Box, Drawer } from '@mui/material';
-// import { useState } from 'react';
-// import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-
-// export default function MyDrawer({ cart }) {
-//   console.log('items in cart', cart);
-
-//   const [open, setOpen] = useState(false);
-
-//   const toggleDrawer = (newOpen) => () => {
-//     setOpen(newOpen);
-//   };
-
-//   const DrawerList = cart.map((item) => {
-//     return (
-//       <Box
-//         sx={{ width: 250 }}
-//         role="presentation"
-//         onClick={toggleDrawer(false)}
-//       >
-//         {item?.title}
-//       </Box>
-//     );
-//   });
-
-//   return (
-//     <>
-//       <Box
-//         sx={{
-//           justifyContent: 'end',
-//           display: 'flex',
-//           alignItems: 'flex-end',
-//         }}
-//       >
-//         <ShoppingCartIcon fontSize="large" onClick={toggleDrawer(true)} />
-//         <Drawer open={open} onClose={toggleDrawer(false)} anchor="right">
-//           {DrawerList}
-//         </Drawer>
-//       </Box>
-//     </>
-//   );
-// }
-
 import {
   Box,
   Drawer,
@@ -53,13 +10,25 @@ import { useState } from 'react';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+// import { useSelector } from 'react-redux';
+
 import { productImages } from '../images/images';
 
 export default function MyDrawer({ cart, setCart }) {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
+  };
+  const handleCheckout = () => {
+    setOpen(false); // Close the drawer
+    navigate('/checkout'); // Programmatically navigate to checkout page
+  };
+
+  const handleCart = () => {
+    navigate('/cart'); // Programmatically navigate to checkout page
   };
 
   // Handle quantity increase
@@ -180,13 +149,15 @@ export default function MyDrawer({ cart, setCart }) {
               borderTop: '1px solid #ddd',
               marginTop: 'auto',
               paddingTop: 2,
+              backgroundColor: '#272727',
             }}
           >
-            <Typography variant="h6">
+            <Typography variant="h6" sx={{ color: 'white', pl: 2 }}>
               Subtotal: ${calculateSubtotal().toFixed(2)}
             </Typography>
             <Button
               variant="contained"
+              onClick={handleCheckout}
               sx={{
                 width: '100%',
                 backgroundColor: '#333',
@@ -194,7 +165,19 @@ export default function MyDrawer({ cart, setCart }) {
                 marginTop: 2,
               }}
             >
-              Checkout
+              CHECKOUT
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleCart}
+              sx={{
+                width: '100%',
+                backgroundColor: '#333',
+                color: 'white',
+                marginTop: 2,
+              }}
+            >
+              GO TO CART
             </Button>
           </Box>
         </Box>
