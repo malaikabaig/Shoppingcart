@@ -3,226 +3,204 @@ import {
   Box,
   Typography,
   Button,
-  Grid,
+  Container,
+  Paper,
   Divider,
   IconButton,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import Header from '../models/header';
-import { productImages } from '../images/images'; // Import product images
+import DeleteIcon from '@mui/icons-material/Delete';
+import { productImages } from '../images/images';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Cart({ cart, setCart }) {
   const [subtotal, setSubtotal] = useState(0);
 
-  // Calculate the subtotal whenever cart changes
   useEffect(() => {
-    console.log('cart : ', cart);
     const total = cart?.reduce(
-      (acc, item) => acc + item.price * item.quantity,
+      (acc, item) => acc + item.price * (item.quantity || 1),
       0
     );
     setSubtotal(total);
   }, [cart]);
 
-  // Handle removing an item from the cart
-  const handleRemoveItem = (id) => {
-    setCart((prevCart) => prevCart?.filter((item) => item.id !== id));
+  // --- NAYE AUR UPDATED CART FUNCTIONS JO BACKEND SE BAAT KARTE HAIN ---
+
+  const updateCartInDB = async (productId, quantity) => {
+    // Agar quantity 0 se kam ho jaye to item remove kar do
+    if (quantity < 1) {
+      handleRemoveItem(productId);
+      return;
+    }
+    try {
+      const token = localStorage.getItem('auth-token');
+      const res = await axios.post(
+        'http://localhost:5000/api/cart/update-quantity',
+        { productId, quantity },
+        { headers: { 'x-auth-token': token } }
+      );
+      setCart(res.data.items);
+    } catch (err) {
+      console.error('Failed to update quantity', err);
+    }
   };
 
-  // Handle increasing quantity
+  const handleRemoveItem = async (productId) => {
+    try {
+      const token = localStorage.getItem('auth-token');
+      const res = await axios.post(
+        'http://localhost:5000/api/cart/remove-item',
+        { productId },
+        { headers: { 'x-auth-token': token } }
+      );
+      setCart(res.data.items);
+    } catch (err) {
+      console.error('Failed to remove item', err);
+    }
+  };
+
   const handleIncreaseQuantity = (productId) => {
-    setCart(
-      cart.map((item) =>
-        item.id === productId
-          ? { ...item, quantity: (item.quantity || 1) + 1 }
-          : item
-      )
-    );
+    const item = cart.find((p) => p.productId === productId);
+    if (item) {
+      updateCartInDB(productId, item.quantity + 1);
+    }
   };
 
-  // Handle decreasing quantity
   const handleDecreaseQuantity = (productId) => {
-    setCart((prevCart) => {
-      return prevCart
-        .map((item) => {
-          if (item.id === productId) {
-            const newQuantity = (item.quantity || 1) - 1;
-            return newQuantity > 0 ? { ...item, quantity: newQuantity } : null;
-          }
-          return item;
-        })
-        .filter(Boolean);
-    });
+    const item = cart.find((p) => p.productId === productId);
+    if (item) {
+      updateCartInDB(productId, item.quantity - 1);
+    }
   };
 
-  // Handle clearing the cart
   const handleClearCart = () => {
+    // Iske liye bhi aek backend route ban sakta hai, فی الحال yeh local hai.
     setCart([]);
   };
 
-  // Handle checkout (placeholder for actual checkout logic)
-  const handleCheckout = () => {
-    alert('Proceeding to checkout!');
-  };
-
   return (
-    <>
-      <Header />
-      <Box
-        sx={{
-          pt: 10,
-          minHeight: '100vh', // Ensure the container takes up the full viewport height
-          display: 'flex', // Use flexbox for centering
-          justifyContent: 'center', // Center horizontally
-          alignItems: 'start', // Center vertically
-          backgroundColor: '#f0f0f0', // Background color for the entire viewport (optional)
-        }}
-      >
-        <Box
-          sx={{
-            padding: { xs: 3, md: 5 },
-            maxWidth: 600, // Max width of the inner box
-            width: '100%', // Allow the box to shrink for smaller screens
-            border: '1px solid #ddd',
-            borderRadius: 4,
-            backgroundColor: 'lavender', // Box background color
-            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', // Subtle shadow
-            textAlign: 'center', // Center the content inside the box
-          }}
-        >
-          <Typography variant="h4" gutterBottom>
-            Your Cart
-          </Typography>
+    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+      <Paper elevation={3} sx={{ p: { xs: 2, md: 4 } }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Your Cart
+        </Typography>
+        <Divider sx={{ mb: 3 }} />
 
-          {cart?.length > 0 ? (
-            <Grid
-              container
-              spacing={3}
-              sx={{
-                maxWidth: { xs: '100%', md: '80%' }, // Full width on mobile, centered on larger screens
-              }}
-            >
-              {/* Display cart items */}
-              <Grid item xs={12} md={8}>
-                {cart?.map((item) => (
-                  <Box
-                    key={item.id}
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      padding: 2,
-                      border: '1px solid #ddd',
-                      borderRadius: 2,
-                      marginBottom: 2,
-                      backgroundColor: 'white',
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <img
-                        src={productImages[item.image]} // Consistent image source
-                        alt={item.title}
-                        style={{
-                          width: '80px',
-                          height: 'auto',
-                          borderRadius: '4px',
-                        }}
-                      />
-                      <Box sx={{ marginLeft: 2 }}>
-                        <Typography variant="h6">{item.title}</Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          Size: {item.size || 'Not specified'}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          Quantity: {item.quantity}
-                        </Typography>
-                        {/* Quantity control buttons */}
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            marginTop: 1,
-                          }}
-                        >
-                          <IconButton
-                            onClick={() => handleDecreaseQuantity(item.id)}
-                          >
-                            <RemoveIcon />
-                          </IconButton>
-                          <Typography>{item.quantity}</Typography>
-                          <IconButton
-                            onClick={() => handleIncreaseQuantity(item.id)}
-                          >
-                            <AddIcon />
-                          </IconButton>
-                        </Box>
-                      </Box>
-                    </Box>
-                    <Box>
-                      <Typography variant="h6">
-                        {item.currencyFormat}
-                        {item.price * item.quantity}
-                      </Typography>
-                      <Button
-                        variant="outlined"
-                        color="error"
-                        sx={{ marginTop: 1 }}
-                        onClick={() => handleRemoveItem(item.id)}
-                      >
-                        Remove
-                      </Button>
-                    </Box>
-                  </Box>
-                ))}
-              </Grid>
-
-              {/* Subtotal and Checkout Section */}
-              <Grid item xs={12} md={4}>
+        {cart && cart.length > 0 ? (
+          <>
+            {cart.map((item, index) => (
+              <React.Fragment key={item.productId}>
                 <Box
                   sx={{
-                    padding: 2,
-                    border: '1px solid #ddd',
-                    borderRadius: 2,
-                    backgroundColor: 'white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    mb: 2,
                   }}
                 >
-                  <Typography variant="h6">Subtotal</Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-                    {cart.length > 0 ? `$${subtotal.toFixed(2)}` : '$0.00'}
+                  <img
+                    src={productImages[item.image]}
+                    alt={item.title}
+                    style={{
+                      width: '100px',
+                      height: '100px',
+                      objectFit: 'cover',
+                      marginRight: '16px',
+                      borderRadius: '8px',
+                    }}
+                  />
+                  <Box
+                    sx={{ flexGrow: 1, width: '100%', mt: { xs: 2, sm: 0 } }}
+                  >
+                    <Typography variant="h6">{item.title}</Typography>
+                    <Typography variant="body1">
+                      ${item.price.toFixed(2)}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      my: { xs: 2, sm: 0 },
+                    }}
+                  >
+                    <IconButton
+                      onClick={() => handleDecreaseQuantity(item.productId)}
+                    >
+                      <RemoveIcon />
+                    </IconButton>
+                    <Typography sx={{ mx: 2 }}>{item.quantity}</Typography>
+                    <IconButton
+                      onClick={() => handleIncreaseQuantity(item.productId)}
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  </Box>
+                  <Typography
+                    variant="h6"
+                    sx={{ width: '100px', textAlign: 'right', mx: 2 }}
+                  >
+                    ${(item.price * item.quantity).toFixed(2)}
                   </Typography>
-                  <Divider sx={{ marginY: 2 }} />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    onClick={handleCheckout}
-                  >
-                    Proceed to Checkout
-                  </Button>
-                  <Button
-                    variant="outlined"
+                  <IconButton
                     color="error"
-                    fullWidth
-                    sx={{ marginTop: 2 }}
-                    onClick={handleClearCart}
+                    onClick={() => handleRemoveItem(item.productId)}
                   >
-                    Clear Cart
-                  </Button>
+                    <DeleteIcon />
+                  </IconButton>
                 </Box>
-              </Grid>
-            </Grid>
-          ) : (
-            <Typography
-              variant="h6"
-              color="textSecondary"
-              sx={{ marginTop: 5, textAlign: 'center' }}
+                {index < cart.length - 1 && <Divider sx={{ my: 2 }} />}
+              </React.Fragment>
+            ))}
+            <Divider sx={{ my: 3 }} />
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
             >
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={handleClearCart}
+              >
+                Clear Cart
+              </Button>
+              <Box sx={{ textAlign: 'right' }}>
+                <Typography variant="h5">
+                  Subtotal: ${subtotal.toFixed(2)}
+                </Typography>
+                <Button
+                  component={Link}
+                  to="/checkout"
+                  variant="contained"
+                  color="primary"
+                  sx={{ mt: 1 }}
+                >
+                  Proceed to Checkout
+                </Button>
+              </Box>
+            </Box>
+          </>
+        ) : (
+          <Box sx={{ textAlign: 'center', py: 5 }}>
+            <Typography variant="h6" color="text.secondary">
               Your cart is empty.
             </Typography>
-          )}
-        </Box>
-      </Box>
-    </>
+            <Button
+              component={Link}
+              to="/shop"
+              variant="contained"
+              sx={{ mt: 2 }}
+            >
+              Continue Shopping
+            </Button>
+          </Box>
+        )}
+      </Paper>
+    </Container>
   );
 }

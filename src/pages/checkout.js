@@ -1,11 +1,9 @@
 import React from 'react';
 import { Box, Typography, Divider } from '@mui/material';
-import Header from '../models/header';
 
 export default function CheckoutPage({ cart }) {
   return (
     <>
-      <Header />
       <Box
         sx={{
           display: 'flex',

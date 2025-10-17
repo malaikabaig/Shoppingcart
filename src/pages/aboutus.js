@@ -1,13 +1,9 @@
 import React from 'react';
 import { Box, Typography, Grid } from '@mui/material';
 
-import Header from '../models/header';
-
 export default function AboutUs() {
   return (
     <>
-      <Header />
-
       <Box sx={{ padding: 5 }}>
         <Typography variant="h4" gutterBottom>
           About Our Brand
