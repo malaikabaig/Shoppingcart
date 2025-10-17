@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 let User = require('../models/user.model');
 const upload = require('../config/cloudinary');
-const auth = require('../middleware/authMiddleware'); // Middleware import karein
+const auth = require('../middleware/authMiddleware');
 
 // REGISTER A NEW USER
 router.post('/register', upload.single('avatar'), async (req, res) => {
@@ -51,7 +51,8 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ msg: 'Invalid credentials.' });
     }
 
-    const token = jwt.sign({ id: user._id }, 'your_jwt_secret');
+    // YEH LINE CHANGE HUI HAI
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
     res.json({
       token,
@@ -59,7 +60,6 @@ router.post('/login', async (req, res) => {
         id: user._id,
         username: user.username,
         avatar: user.avatar,
-        email: user.email,
       },
     });
   } catch (err) {
@@ -67,7 +67,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// GET LOGGED IN USER'S DATA (NAYA ROUTE)
+// GET LOGGED IN USER'S DATA
 router.get('/', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user).select('-password');
