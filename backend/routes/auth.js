@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-let User = require('../models/user.model');
+let User = require('../models/user');
 const upload = require('../config/cloudinary');
 const auth = require('../middleware/authMiddleware');
 

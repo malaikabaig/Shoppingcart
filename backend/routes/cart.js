@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const auth = require('../middleware/authMiddleware');
-let Cart = require('../models/cart.model');
+let Cart = require('../models/cart');
 
 // GET USER'S CART
 router.get('/', auth, async (req, res) => {

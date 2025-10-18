@@ -1,50 +1,50 @@
-import one1 from '../images/one1.webp';
-import one2 from '../images/one2.webp';
+import one1 from './one1.webp';
+import one2 from './one2.webp';
 
-import two1 from '../images/two1.webp';
-import two2 from '../images/two2.webp';
+import two1 from './two1.webp';
+import two2 from './two2.webp';
 
-import three1 from '../images/three1.webp';
-import three2 from '../images/three2.webp';
+import three1 from './three1.webp';
+import three2 from './three2.webp';
 
-import four1 from '../images/four1.webp';
-import four2 from '../images/four2.webp';
+import four1 from './four1.webp';
+import four2 from './four2.webp';
 
-import five1 from '../images/five1.webp';
-import five2 from '../images/five2.webp';
+import five1 from './five1.webp';
+import five2 from './five2.webp';
 
-import six1 from '../images/six1.webp';
-import six2 from '../images/six2.webp';
+import six1 from './six1.webp';
+import six2 from './six2.webp';
 
-import seven1 from '../images/seven1.webp';
-import seven2 from '../images/seven2.webp';
+import seven1 from './seven1.webp';
+import seven2 from './seven2.webp';
 
-import eight1 from '../images/eight1.webp';
-import eight2 from '../images/eight2.webp';
+import eight1 from './eight1.webp';
+import eight2 from './eight2.webp';
 
-import nine1 from '../images/nine1.webp';
-import nine2 from '../images/nine2.webp';
+import nine1 from './nine1.webp';
+import nine2 from './nine2.webp';
 
-import ten1 from '../images/ten1.webp';
-import ten2 from '../images/ten2.webp';
+import ten1 from './ten1.webp';
+import ten2 from './ten2.webp';
 
-import eleven1 from '../images/eleven1.webp';
-import eleven2 from '../images/eleven2.webp';
+import eleven1 from './eleven1.webp';
+import eleven2 from './eleven2.webp';
 
-import twelve1 from '../images/twelve1.webp';
-import twelve2 from '../images/twelve2.webp';
+import twelve1 from './twelve1.webp';
+import twelve2 from './twelve2.webp';
 
-import thirteen1 from '../images/thirteen1.webp';
-import thirteen2 from '../images/thirteen2.webp';
+import thirteen1 from './thirteen1.webp';
+import thirteen2 from './thirteen2.webp';
 
-import fourteen1 from '../images/fourteen1.webp';
-import fourteen2 from '../images/fourteen2.webp';
+import fourteen1 from './fourteen1.webp';
+import fourteen2 from './fourteen2.webp';
 
-import fifteen1 from '../images/fifteen1.webp';
-import fifteen2 from '../images/fifteen2.webp';
+import fifteen1 from './fifteen1.webp';
+import fifteen2 from './fifteen2.webp';
 
-import sixteen1 from '../images/sixteen1.webp';
-import sixteen2 from '../images/sixteen2.webp';
+import sixteen1 from './sixteen1.webp';
+import sixteen2 from './sixteen2.webp';
 
 // images
 export const productImages = {
