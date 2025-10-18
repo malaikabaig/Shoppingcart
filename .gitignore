@@ -1,26 +1,37 @@
+Bilkul, main samajh gaya. Aap chahti hain ke aapki bheji hui .gitignore file ko main root folder ke hisaab se set kar doon, jismein frontend/ ke paths sahi se add kiye gaye hon.
+
+Yeh lijiye, aapki hi file ka updated version. Ismein humne har frontend wali file/folder ke naam se pehle /frontend laga diya hai taake git ko sahi raasta (path) mil sake.
+
+File: .gitignore (Final Code for Root Folder)
+Aap apne project ke root folder (SHOPPINGCART) mein .gitignore file kholein aur uske poore content ko is naye code se replace kar dein.
+
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Backend dependencies
+/backend/node_modules
 
-# testing
-/coverage
+# Backend environment variables
+/backend/.env
 
-# production
-/build
+# Frontend dependencies
+/frontend/node_modules
+/frontend/.pnp
+/frontend/.pnp.js
 
-# misc
+# Frontend testing
+/frontend/coverage
+
+# Frontend production build
+/frontend/build
+
+# Miscellaneous files (from any folder)
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Local environment variables for the backend
-/backend/.env
+# Local environment files for frontend
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local

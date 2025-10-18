@@ -548,7 +548,7 @@
 
 import { useState } from 'react';
 import { Box, Button, Grid, Typography } from '@mui/material';
-import productData from '../Utilis/products.json';
+import productData from '../utils/products.json';
 import { productImages } from '../images/images';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
