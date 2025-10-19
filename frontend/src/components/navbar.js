@@ -99,10 +99,7 @@ const Navbar = ({ cart, setCart, userData, setUserData }) => {
     navigate('/cart');
   };
 
-  // --- NAYE AUR UPDATED CART FUNCTIONS JO BACKEND SE BAAT KARTE HAIN ---
-
   const updateCartInDB = async (productId, quantity) => {
-    // Agar quantity 0 se kam ho jaye to item remove kar do
     if (quantity < 1) {
       removeItemFromCart(productId);
       return;
@@ -116,7 +113,7 @@ const Navbar = ({ cart, setCart, userData, setUserData }) => {
         { productId, quantity },
         { headers: { 'x-auth-token': token } }
       );
-      setCart(res.data.items); // Backend se naya cart le kar state update karo
+      setCart(res.data.items);
     } catch (err) {
       console.error('Failed to update quantity', err);
     }
@@ -238,8 +235,21 @@ const Navbar = ({ cart, setCart, userData, setUserData }) => {
 
   return (
     <>
-      <AppBar position="static" color="default" elevation={1}>
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
+      <AppBar
+        position="static"
+        // color="transparent" <-- YEH LINE HATA DI HAI
+        elevation={1}
+        sx={{
+          background: 'linear-gradient(45deg, #f3e5f5 30%, #ba90c1ff 90%)',
+        }}
+      >
+        <Toolbar
+          sx={{
+            justifyContent: 'space-between',
+            // Toolbar transparent hi rahega taake AppBar ka color nazar aaye
+            backgroundColor: 'transparent',
+          }}
+        >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography
               variant="h6"
