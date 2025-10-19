@@ -1,23 +1,25 @@
 import React from 'react';
 import { Box, Typography, Divider, Button, Paper, Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { productImages } from '../images/images'; // Images import karein
+import { productImages } from '../images/images';
 
 export default function CheckoutPage({ cart }) {
-  // Calculate Subtotal
   const subtotal = cart.reduce(
     (acc, item) => acc + item.price * (item.quantity || 1),
     0
   );
-  const shipping = subtotal > 0 ? 5.0 : 0; // Agar cart mein kuch hai to $5 shipping
+
+  const needsShipping = cart.some((item) => item.isFreeShipping === false);
+
+  const shipping = cart.length > 0 && needsShipping ? 20.0 : 0.0;
+
   const total = subtotal + shipping;
 
   return (
     <Box
       sx={{
-        minHeight: 'calc(100vh - 64px)', // Navbar ki height minus karke full height
+        minHeight: 'calc(100vh - 64px)',
         p: { xs: 2, sm: 4 },
-        // Homepage ke hero section se inspired gradient background
         background: 'linear-gradient(45deg, #f3e5f5 30%, #e1bee7 90%)',
         display: 'flex',
         justifyContent: 'center',
@@ -31,7 +33,7 @@ export default function CheckoutPage({ cart }) {
           maxWidth: 700,
           borderRadius: '12px',
           p: { xs: 2, sm: 4 },
-          backgroundColor: 'rgba(255, 255, 255, 0.9)', // Thora sa transparent white
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
           backdropFilter: 'blur(10px)',
         }}
       >

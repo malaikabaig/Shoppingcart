@@ -51,7 +51,6 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ msg: 'Invalid credentials.' });
     }
 
-    // YEH LINE CHANGE HUI HAI
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
     res.json({
@@ -60,6 +59,7 @@ router.post('/login', async (req, res) => {
         id: user._id,
         username: user.username,
         avatar: user.avatar,
+        email: user.email,
       },
     });
   } catch (err) {

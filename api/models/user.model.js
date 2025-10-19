@@ -18,10 +18,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // Naya field add karein
     avatar: {
       type: String,
-      default: '', // Default value agar user image upload nahi karta
+      default: '',
     },
   },
   {

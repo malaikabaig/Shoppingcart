@@ -65,7 +65,6 @@ export default function Cart({ cart, setCart }) {
   const handleClearCart = async () => {
     try {
       const token = localStorage.getItem('auth-token');
-      // Iske liye backend mein /api/cart/clear route hona chahiye
       await axios.post(
         `${API_URL}/api/cart/clear`,
         {},
@@ -101,7 +100,7 @@ export default function Cart({ cart, setCart }) {
         background: 'linear-gradient(45deg, #f3e5f5 30%, #e1bee7 90%)',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'flex-start', // Items top se start honge
+        alignItems: 'flex-start',
       }}
     >
       <Container maxWidth="lg">

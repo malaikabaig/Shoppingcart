@@ -65,7 +65,7 @@ const Navbar = ({ cart, setCart, userData, setUserData }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl);
 
-  // --- Profile Menu Functions ---
+  // Profile Menu Functions
   const handleMenuClick = (event) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
   const handleProfile = () => {
@@ -80,7 +80,7 @@ const Navbar = ({ cart, setCart, userData, setUserData }) => {
     handleMenuClose();
   };
 
-  // --- Drawer and Cart Meta Functions ---
+  // Drawer and Cart Meta Functions
   const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
   const calculateTotalQuantity = () =>
     cart.reduce((total, item) => total + (item.quantity || 1), 0);
@@ -152,81 +152,132 @@ const Navbar = ({ cart, setCart, userData, setUserData }) => {
     <Box
       sx={{
         width: 300,
-        padding: 2,
+        p: 2,
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
+        background: 'linear-gradient(180deg, #f3e5f5 0%, #e1bee7 100%)',
       }}
       role="presentation"
     >
-      <Typography variant="h6" gutterBottom>
+      <Typography
+        variant="h5"
+        gutterBottom
+        sx={{ fontWeight: 'bold', color: '#333' }}
+      >
         Shopping Cart
       </Typography>
-      {cart && cart.length > 0 ? (
-        cart.map((item) => (
-          <Box
-            key={item.productId}
-            sx={{ display: 'flex', alignItems: 'center', mb: 2 }}
-          >
-            <img
-              src={productImages[item.image]}
-              alt={item.title}
-              style={{
-                width: '50px',
-                height: '50px',
-                objectFit: 'cover',
-                marginRight: '16px',
-              }}
-            />
-            <Box sx={{ flexGrow: 1 }}>
-              <Typography>{item.title}</Typography>
-              <Typography>${item.price}</Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <IconButton
-                  size="small"
-                  onClick={() => handleDecreaseQuantity(item.productId)}
-                >
-                  <RemoveIcon />
-                </IconButton>
-                <Typography>{item.quantity}</Typography>
-                <IconButton
-                  size="small"
-                  onClick={() => handleIncreaseQuantity(item.productId)}
-                >
-                  <AddIcon />
-                </IconButton>
+
+      {/* Cart Items Section */}
+      <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+        {cart && cart.length > 0 ? (
+          cart.map((item) => (
+            <Box
+              key={item.productId}
+              sx={{ display: 'flex', alignItems: 'center', mb: 2 }}
+            >
+              <img
+                src={productImages[item.image]}
+                alt={item.title}
+                style={{
+                  width: '60px',
+                  height: '80px',
+                  objectFit: 'cover',
+                  marginRight: '16px',
+                  borderRadius: '8px',
+                }}
+              />
+              <Box sx={{ flexGrow: 1 }}>
+                <Typography sx={{ fontWeight: 500 }}>{item.title}</Typography>
+                <Typography color="text.secondary">
+                  ${item.price.toFixed(2)}
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
+                  <IconButton
+                    size="small"
+                    onClick={() => handleDecreaseQuantity(item.productId)}
+                  >
+                    <RemoveIcon fontSize="small" />
+                  </IconButton>
+                  <Typography sx={{ mx: 1 }}>{item.quantity}</Typography>
+                  <IconButton
+                    size="small"
+                    onClick={() => handleIncreaseQuantity(item.productId)}
+                  >
+                    <AddIcon fontSize="small" />
+                  </IconButton>
+                </Box>
               </Box>
             </Box>
-          </Box>
-        ))
-      ) : (
-        <Typography>Your cart is empty.</Typography>
-      )}
+          ))
+        ) : (
+          <Typography
+            sx={{ textAlign: 'center', mt: 4, color: 'text.secondary' }}
+          >
+            Your cart is empty.
+          </Typography>
+        )}
+      </Box>
+
       {cart && cart.length > 0 && (
         <Box
           sx={{
-            borderTop: '1px solid #ddd',
+            borderTop: '1px solid rgba(0, 0, 0, 0.1)',
             mt: 'auto',
             pt: 2,
-            backgroundColor: '#f5f5f5',
+
+            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+            backdropFilter: 'blur(5px)',
+            mx: -2,
+            px: 2,
+            pb: 2,
           }}
         >
-          <Typography variant="h6">
-            Subtotal: ${calculateSubtotal().toFixed(2)}
-          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 2,
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+              Subtotal:
+            </Typography>
+            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+              ${calculateSubtotal().toFixed(2)}
+            </Typography>
+          </Box>
           <Button
             variant="contained"
             onClick={handleCheckout}
-            sx={{ width: '100%', mt: 2 }}
+            fullWidth
+            sx={{
+              py: 1.5,
+              borderRadius: '50px',
+              backgroundColor: '#212121',
+              '&:hover': { backgroundColor: '#424242' },
+            }}
           >
             CHECKOUT
           </Button>
           <Button
             variant="outlined"
             onClick={handleCart}
-            sx={{ width: '100%', mt: 1 }}
+            fullWidth
+            sx={{
+              mt: 1,
+              py: 1.5,
+              borderRadius: '50px',
+              borderColor: '#212121',
+              color: '#212121',
+              '&:hover': {
+                backgroundColor: 'rgba(33, 33, 33, 0.1)',
+                borderColor: '#212121',
+              },
+            }}
           >
-            GO TO CART
+            VIEW CART
           </Button>
         </Box>
       )}

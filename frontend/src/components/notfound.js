@@ -8,15 +8,15 @@ const NotFound = () => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      height="100vh" // Full viewport height
-      bgcolor="#f3e5f5" // Light lavender background
+      height="100vh"
+      bgcolor="#f3e5f5"
     >
       <Box
         textAlign="center"
-        bgcolor="lavender" // Lavender background for the title box
-        borderRadius={2} // Rounded corners
-        padding={4} // Spacing inside the box
-        boxShadow={3} // Shadow for a lifted effect
+        bgcolor="lavender"
+        borderRadius={2}
+        padding={4}
+        boxShadow={3}
       >
         <Typography variant="h1" component="h1" gutterBottom>
           404 - Page Not Found

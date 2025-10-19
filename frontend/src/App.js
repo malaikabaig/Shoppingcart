@@ -25,6 +25,7 @@
 
 // export default App;
 
+import { Box, Typography, Container } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/home';
@@ -38,8 +39,9 @@ import Header from './components/header';
 import Login from './pages/login';
 import Signup from './pages/signup';
 import Profile from './pages/profile';
-import ProductPage from './pages/productpage'; // Yahan page import ho raha hai
+import ProductPage from './pages/productpage';
 import axios from 'axios';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const API_URL =
   process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000';
@@ -99,7 +101,6 @@ function App() {
           element={<ShoppingContent setCart={setCart} userData={userData} />}
         />
 
-        {/* YEH ROUTE AB PRODUCT PAGE DIKHAYEGA */}
         <Route
           path="/product/:id"
           element={<ProductPage setCart={setCart} userData={userData} />}
@@ -115,11 +116,38 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile userData={userData} />} />
 
-        {/* Agar koi aur URL ho to Not Found page aayega */}
         <Route path="*" element={<NotFound />} />
 
         <Route path="/checkout" element={<CheckoutPage cart={cart} />} />
       </Routes>
+      <Box
+        component="footer"
+        sx={{
+          py: 3,
+          px: 2,
+          background: 'linear-gradient(45deg, #f3e5f5 30%, #ba90c1ff 90%)',
+          textAlign: 'center',
+          borderTop: '1px solid #ddd',
+        }}
+      >
+        <Container maxWidth="sm">
+          <Typography
+            variant="body1"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            Developed with &nbsp;
+            <FavoriteIcon sx={{ color: '#d81b60', fontSize: '1rem' }} />
+            &nbsp; by Malaika Tayyab
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            © {new Date().getFullYear()} My Shop. All Rights Reserved.
+          </Typography>
+        </Container>
+      </Box>
     </>
   );
 }

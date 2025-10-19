@@ -37,7 +37,7 @@ export default function AboutUs() {
 
   return (
     <Box sx={{ background: '#fff' }}>
-      {/* ===== HERO SECTION | OUR STORY ===== */}
+      {/*  HERO SECTION*/}
       <Box
         sx={{
           position: 'relative',
@@ -79,7 +79,7 @@ export default function AboutUs() {
         </Box>
       </Box>
 
-      {/* ===== CONTENT SECTION | HEART OF OUR BRAND ===== */}
+      {/* HEART OF OUR BRAND */}
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Typography
           variant="h3"
@@ -131,7 +131,7 @@ export default function AboutUs() {
         </Grid>
       </Container>
 
-      {/* ===== SOCIAL MEDIA SECTION ===== */}
+      {/* SOCIAL MEDIA SECTION */}
       <Box sx={{ background: '#f5f5f5', py: 6 }}>
         <Container maxWidth="md" sx={{ textAlign: 'center' }}>
           <Typography variant="h5" color="text.secondary">

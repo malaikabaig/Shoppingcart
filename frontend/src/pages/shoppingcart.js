@@ -1,5 +1,14 @@
 import { useState } from 'react';
-import { Box, Button, Grid, Typography, Container, Paper } from '@mui/material';
+import {
+  Box,
+  Button,
+  Grid,
+  Typography,
+  Container,
+  Paper,
+  Snackbar,
+  Alert,
+} from '@mui/material';
 import productData from '../utils/products.json';
 import { productImages } from '../images/images';
 import axios from 'axios';
@@ -15,12 +24,24 @@ export default function ShoppingContent({ setCart, userData }) {
   const [hovered, setHovered] = useState(null);
   const navigate = useNavigate();
 
+  // Snackbar states
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
+
   const handleAddToCart = async (product) => {
+    // Check if user not logged in
     if (!userData || !userData.token) {
-      alert('Please log in to add items to your cart.');
-      navigate('/login');
+      setSnackbarMessage('Please log in to add items. Redirecting...');
+      setSnackbarSeverity('info');
+      setOpenSnackbar(true);
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
       return;
     }
+
+    // If user logged in
     try {
       const token = localStorage.getItem('auth-token');
       const itemToAdd = {
@@ -28,14 +49,20 @@ export default function ShoppingContent({ setCart, userData }) {
         title: product.title,
         price: product.price,
         image: product.image,
+        isFreeShipping: product.isFreeShipping,
       };
       const res = await axios.post(`${API_URL}/api/cart/add`, itemToAdd, {
         headers: { 'x-auth-token': token },
       });
       setCart(res.data.items);
-      alert('Product added to cart!');
+      setSnackbarMessage('Product added to cart!');
+      setSnackbarSeverity('success');
+      setOpenSnackbar(true);
     } catch (err) {
       console.error('Failed to add item to cart', err);
+      setSnackbarMessage('Failed to add product to cart.');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
     }
   };
 
@@ -125,7 +152,7 @@ export default function ShoppingContent({ setCart, userData }) {
                       overflow: 'hidden',
                       '&:hover': {
                         transform: 'translateY(-5px)',
-                        boxShadow: '0px 10px 25px rgba(106, 27, 154, 0.2)', // Navbar-inspired shadow
+                        boxShadow: '0px 10px 25px rgba(106, 27, 154, 0.2)',
                       },
                     }}
                     onMouseOver={() => setHovered(product.id)}
@@ -145,22 +172,26 @@ export default function ShoppingContent({ setCart, userData }) {
                           objectFit: 'cover',
                         }}
                       />
-                      {product.isFreeShipping && (
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            position: 'absolute',
-                            top: 8,
-                            right: 8,
-                            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                            color: 'white',
-                            padding: '2px 8px',
-                            borderRadius: '12px',
-                          }}
-                        >
-                          Free Shipping
-                        </Typography>
-                      )}
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          display:
+                            product.isFreeShipping === undefined
+                              ? 'none'
+                              : 'block',
+                          position: 'absolute',
+                          top: 8,
+                          right: 8,
+                          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                          color: 'white',
+                          padding: '2px 8px',
+                          borderRadius: '12px',
+                        }}
+                      >
+                        {product.isFreeShipping
+                          ? 'Free Shipping'
+                          : 'Shipping Charges Apply'}
+                      </Typography>
                     </Box>
                     <Box sx={{ p: 2 }}>
                       <Typography
@@ -201,6 +232,21 @@ export default function ShoppingContent({ setCart, userData }) {
           </Grid>
         </Grid>
       </Container>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={2000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity={snackbarSeverity}
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

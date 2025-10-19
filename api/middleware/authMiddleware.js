@@ -9,7 +9,6 @@ const auth = (req, res, next) => {
         .json({ msg: 'No authentication token, authorization denied.' });
     }
 
-    // YEH LINE CHANGE HUI HAI
     const verified = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!verified) {

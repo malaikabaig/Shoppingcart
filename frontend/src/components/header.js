@@ -12,7 +12,6 @@
 import { Box } from '@mui/material';
 import Navbar from './navbar';
 
-// userData aur setUserData ko yahan receive karein
 export default function Header({ cart, setCart, userData, setUserData }) {
   return (
     <Box sx={{ textAlign: 'center' }}>

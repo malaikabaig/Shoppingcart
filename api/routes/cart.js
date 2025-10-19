@@ -18,13 +18,11 @@ router.get('/', auth, async (req, res) => {
 // ADD ITEM TO CART
 router.post('/add', auth, async (req, res) => {
   try {
-    const { productId, title, price, image } = req.body;
+    const { productId, title, price, image, isFreeShipping } = req.body;
     const userId = req.user;
     let cart = await Cart.findOne({ userId });
 
     if (cart) {
-      // Cart exists for user
-
       let itemIndex = cart.items.findIndex((p) => p.productId == productId);
 
       if (itemIndex > -1) {
@@ -34,7 +32,14 @@ router.post('/add', auth, async (req, res) => {
         cart.items[itemIndex] = productItem;
       } else {
         // Product does not exists in cart, add new item
-        cart.items.push({ productId, title, price, image, quantity: 1 });
+        cart.items.push({
+          productId,
+          title,
+          price,
+          image,
+          quantity: 1,
+          isFreeShipping,
+        });
       }
       cart = await cart.save();
       return res.status(201).send(cart);
@@ -42,7 +47,9 @@ router.post('/add', auth, async (req, res) => {
       // No cart for user, create new cart
       const newCart = await Cart.create({
         userId,
-        items: [{ productId, title, price, image, quantity: 1 }],
+        items: [
+          { productId, title, price, image, quantity: 1, isFreeShipping },
+        ],
       });
       return res.status(201).send(newCart);
     }
@@ -66,7 +73,6 @@ router.post('/update-quantity', auth, async (req, res) => {
       if (quantity > 0) {
         cart.items[itemIndex].quantity = quantity;
       } else {
-        // Agar quantity 0 ya kam hai to item remove kar dein
         cart.items.splice(itemIndex, 1);
       }
       cart = await cart.save();
@@ -94,6 +100,25 @@ router.post('/remove-item', auth, async (req, res) => {
     res.send(cart);
   } catch (err) {
     res.status(500).send('Something went wrong');
+  }
+});
+
+// CLEAR CART
+router.post('/clear', auth, async (req, res) => {
+  try {
+    const userId = req.user;
+    let cart = await Cart.findOne({ userId });
+
+    if (cart) {
+      cart.items = [];
+      cart = await cart.save();
+      res.status(200).send(cart);
+    } else {
+      res.status(200).json({ msg: 'Cart already empty' });
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
 });
 

@@ -7,9 +7,20 @@ import {
   Typography,
   Button,
 } from '@mui/material';
+import { keyframes } from '@mui/system';
 import { Link } from 'react-router-dom';
 
-// Note: You can move the fadeIn animation here if you want cards to animate on other pages too.
+// Define fade-in animation
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const ProductCard = ({ product }) => {
   return (
@@ -25,6 +36,8 @@ const ProductCard = ({ product }) => {
           transform: 'translateY(-5px)',
           boxShadow: '0 8px 30px rgba(0,0,0,0.1)',
         },
+        // Apply the animation here
+        animation: `${fadeIn} 0.5s ease-out forwards`,
       }}
     >
       <CardMedia
@@ -33,7 +46,6 @@ const ProductCard = ({ product }) => {
           height: 280,
           objectFit: 'cover',
         }}
-        // The image URL should now come directly from the product object
         image={product.imageUrl}
         alt={product.title}
       />
@@ -51,7 +63,6 @@ const ProductCard = ({ product }) => {
         </Typography>
       </CardContent>
       <CardActions sx={{ justifyContent: 'center', pb: 2 }}>
-        {/* This link should eventually go to a specific product's page */}
         <Button
           component={Link}
           to={`/product/${product.id}`}

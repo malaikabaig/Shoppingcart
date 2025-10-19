@@ -16,6 +16,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import productData from '../utils/products.json';
 import { productImages } from '../images/images';
 
+// Define animations using keyframes
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -28,12 +29,11 @@ const fadeIn = keyframes`
 `;
 
 const Home = () => {
-  // Pehle 4 products feature karne ke liye
   const featuredProducts = productData.data.products.slice(0, 4);
 
   return (
     <Box>
-      {/* ===== Hero Section (No change) ===== */}
+      {/* Hero Section */}
       <Box
         sx={{
           display: 'flex',
@@ -73,7 +73,6 @@ const Home = () => {
             component={Link}
             to="/shop"
             variant="contained"
-            color="primary"
             size="large"
             endIcon={<ArrowForwardIcon />}
             sx={{
@@ -94,7 +93,7 @@ const Home = () => {
         </Container>
       </Box>
 
-      {/* ===== Featured Products Section ===== */}
+      {/* Featured Products Section */}
       <Container sx={{ py: 8 }} maxWidth="lg">
         <Typography
           variant="h4"
@@ -147,12 +146,20 @@ const Home = () => {
                   </Typography>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'center', pb: 2 }}>
-                  {/* 👇 YAHAN LINK THEEK KAR DIA HAI 👇 */}
                   <Button
                     component={Link}
                     to={`/product/${product.id}`}
                     size="small"
-                    variant="outlined"
+                    variant="contained"
+                    sx={{
+                      backgroundColor: '#212121',
+                      color: 'white',
+                      borderRadius: '20px',
+                      px: 2,
+                      '&:hover': {
+                        backgroundColor: '#424242',
+                      },
+                    }}
                   >
                     View Details
                   </Button>
