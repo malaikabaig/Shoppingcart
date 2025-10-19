@@ -15,6 +15,9 @@ import { productImages } from '../images/images';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+const API_URL =
+  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000';
+
 export default function Cart({ cart, setCart }) {
   const [subtotal, setSubtotal] = useState(0);
 
@@ -37,7 +40,7 @@ export default function Cart({ cart, setCart }) {
     try {
       const token = localStorage.getItem('auth-token');
       const res = await axios.post(
-        'http://localhost:5000/api/cart/update-quantity',
+        `${API_URL}/api/cart/update-quantity`,
         { productId, quantity },
         { headers: { 'x-auth-token': token } }
       );
@@ -51,7 +54,7 @@ export default function Cart({ cart, setCart }) {
     try {
       const token = localStorage.getItem('auth-token');
       const res = await axios.post(
-        'http://localhost:5000/api/cart/remove-item',
+        `${API_URL}/api/cart/remove-item`,
         { productId },
         { headers: { 'x-auth-token': token } }
       );

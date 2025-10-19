@@ -547,11 +547,14 @@
 // }
 
 import { useState } from 'react';
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, Typography, Container } from '@mui/material';
 import productData from '../utils/products.json';
 import { productImages } from '../images/images';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+
+const API_URL =
+  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000';
 
 export default function ShoppingContent({ setCart, userData }) {
   const array = ['XS', 'S', 'M', 'ML', 'L', 'XL', 'XXL'];
@@ -561,7 +564,7 @@ export default function ShoppingContent({ setCart, userData }) {
   const navigate = useNavigate();
 
   const handleAddToCart = async (product) => {
-    if (!userData.token) {
+    if (!userData || !userData.token) {
       alert('Please log in to add items to your cart.');
       navigate('/login');
       return;
@@ -576,14 +579,11 @@ export default function ShoppingContent({ setCart, userData }) {
         image: product.image,
       };
 
-      const res = await axios.post(
-        'http://localhost:5000/api/cart/add',
-        itemToAdd,
-        {
-          headers: { 'x-auth-token': token },
-        }
-      );
+      const res = await axios.post(`${API_URL}/api/cart/add`, itemToAdd, {
+        headers: { 'x-auth-token': token },
+      });
 
+      // Yeh line main cart (App.js wala) ko update karegi
       setCart(res.data.items);
     } catch (err) {
       console.error('Failed to add item to cart', err);
@@ -605,26 +605,27 @@ export default function ShoppingContent({ setCart, userData }) {
     : products;
 
   return (
-    <Box sx={{ mt: 5 }}>
-      <Grid container sx={{ flexDirection: { xs: 'column', md: 'row' } }}>
-        <Grid item xs={12} md={2} sx={{ pl: 5 }}>
-          <Typography sx={{ mb: 3 }}>Sizes :</Typography>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+    <Container maxWidth="xl" sx={{ mt: 5 }}>
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={2}>
+          <Typography sx={{ mb: 3, fontWeight: 'bold' }}>Sizes:</Typography>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
             {array.map((size, index) => (
               <Button
                 key={index}
                 onClick={() => handleSizeSelection(size)}
                 sx={{
                   border:
-                    selectedSize === size
-                      ? '2px solid blue'
-                      : '1px solid black',
+                    selectedSize === size ? '2px solid blue' : '1px solid #ccc',
                   borderRadius: '50%',
-                  width: '40px',
-                  height: '40px',
-                  minWidth: '40px',
+                  width: '48px',
+                  height: '48px',
+                  minWidth: '48px',
                   padding: 0,
-                  backgroundColor: selectedSize === size ? '#cce4ff' : 'white',
+                  backgroundColor: selectedSize === size ? '#e3f2fd' : 'white',
+                  '&:hover': {
+                    backgroundColor: '#f5f5f5',
+                  },
                 }}
               >
                 {size}
@@ -632,23 +633,26 @@ export default function ShoppingContent({ setCart, userData }) {
             ))}
           </Box>
         </Grid>
-        <Grid item xs={12} md={10} sx={{ pl: 3 }}>
-          <Typography sx={{ pt: { xs: 5, md: 0 }, pl: 2 }}>
+        <Grid item xs={12} md={10}>
+          <Typography sx={{ mb: 2 }}>
             Products found: {filteredProducts.length}
           </Typography>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
             {filteredProducts?.map((product) => (
               <Box
                 key={product.id}
                 sx={{
-                  padding: 2,
-                  borderRadius: 2,
-                  width: '200px',
+                  width: '220px',
                   textAlign: 'center',
                   cursor: 'pointer',
                   '&:hover': {
-                    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+                    boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
+                    transform: 'scale(1.02)',
                   },
+                  transition: 'all 0.3s ease-in-out',
+                  border: '1px solid #eee',
+                  borderRadius: '8px',
+                  p: 1,
                 }}
                 onMouseOver={() => setHovered(product.id)}
                 onMouseLeave={() => setHovered(null)}
@@ -663,19 +667,20 @@ export default function ShoppingContent({ setCart, userData }) {
                     alt={product.title}
                     style={{
                       width: '100%',
+                      height: '280px',
                       objectFit: 'cover',
                       borderRadius: '4px',
                     }}
                   />
                   <Typography
-                    variant="body2"
+                    variant="caption"
                     sx={{
                       position: 'absolute',
                       top: 8,
                       right: 8,
                       backgroundColor: 'rgba(0, 0, 0, 0.7)',
                       color: 'white',
-                      padding: '4px 8px',
+                      padding: '2px 6px',
                       borderRadius: '4px',
                     }}
                   >
@@ -684,20 +689,25 @@ export default function ShoppingContent({ setCart, userData }) {
                       : 'Shipping charges apply'}
                   </Typography>
                 </Box>
-                <Typography sx={{ pt: 2 }} variant="h6">
+                <Typography
+                  sx={{ pt: 2, fontWeight: '500', height: '60px' }}
+                  variant="body1"
+                >
                   {product.title}
                 </Typography>
-                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', my: 1 }}>
                   {product.currencyFormat}
-                  {product.price}
+                  {product.price.toFixed(2)}
                 </Typography>
                 <Button
                   variant="contained"
                   sx={{
-                    mt: 2,
                     width: '100%',
                     backgroundColor: 'black',
                     color: 'white',
+                    '&:hover': {
+                      backgroundColor: '#333',
+                    },
                   }}
                   onClick={() => handleAddToCart(product)}
                 >
@@ -708,6 +718,6 @@ export default function ShoppingContent({ setCart, userData }) {
           </Box>
         </Grid>
       </Grid>
-    </Box>
+    </Container>
   );
 }

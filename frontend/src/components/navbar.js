@@ -56,6 +56,9 @@ import logo from '../images/logo.png';
 import { productImages } from '../images/images';
 import axios from 'axios';
 
+const API_URL =
+  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000';
+
 const Navbar = ({ cart, setCart, userData, setUserData }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
@@ -109,7 +112,7 @@ const Navbar = ({ cart, setCart, userData, setUserData }) => {
     try {
       const token = localStorage.getItem('auth-token');
       const res = await axios.post(
-        'http://localhost:5000/api/cart/update-quantity',
+        `${API_URL}/api/cart/update-quantity`,
         { productId, quantity },
         { headers: { 'x-auth-token': token } }
       );
@@ -124,7 +127,7 @@ const Navbar = ({ cart, setCart, userData, setUserData }) => {
     try {
       const token = localStorage.getItem('auth-token');
       const res = await axios.post(
-        'http://localhost:5000/api/cart/remove-item',
+        `${API_URL}/api/cart/remove-item`,
         { productId },
         { headers: { 'x-auth-token': token } }
       );

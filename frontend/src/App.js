@@ -40,6 +40,9 @@ import Signup from './pages/signup';
 import Profile from './pages/profile';
 import axios from 'axios';
 
+const API_URL =
+  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000';
+
 function App() {
   const [cart, setCart] = useState([]);
   const [userData, setUserData] = useState({
@@ -58,7 +61,7 @@ function App() {
       if (token) {
         try {
           // Token verify karke user data get karein
-          const userRes = await axios.get('http://localhost:5000/api/users/', {
+          const userRes = await axios.get(`${API_URL}/api/users/`, {
             headers: { 'x-auth-token': token },
           });
           setUserData({
@@ -67,7 +70,7 @@ function App() {
           });
 
           // User ka cart bhi database se fetch karein
-          const cartRes = await axios.get('http://localhost:5000/api/cart/', {
+          const cartRes = await axios.get(`${API_URL}/api/cart/`, {
             headers: { 'x-auth-token': token },
           });
           setCart(cartRes.data.items || []);

@@ -3,6 +3,9 @@ import { Box, Typography, TextField, Button, Container } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_URL =
+  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000';
+
 const Login = ({ setUserData, setCart }) => {
   // setCart ko yahan receive karein
   const [email, setEmail] = useState('');
@@ -15,13 +18,10 @@ const Login = ({ setUserData, setCart }) => {
     setError('');
     try {
       // Step 1: User ko login karein
-      const loginRes = await axios.post(
-        'http://localhost:5000/api/users/login',
-        {
-          email,
-          password,
-        }
-      );
+      const loginRes = await axios.post(`${API_URL}/api/users/login`, {
+        email,
+        password,
+      });
 
       // Step 2: User data aur token ko state aur localStorage mein save karein
       setUserData({
@@ -31,7 +31,7 @@ const Login = ({ setUserData, setCart }) => {
       localStorage.setItem('auth-token', loginRes.data.token);
 
       // Step 3: Naya Code - Usi token se user ka cart fetch karein
-      const cartRes = await axios.get('http://localhost:5000/api/cart/', {
+      const cartRes = await axios.get(`${API_URL}/api/cart/`, {
         headers: { 'x-auth-token': loginRes.data.token },
       });
       setCart(cartRes.data.items || []); // Cart state ko update karein

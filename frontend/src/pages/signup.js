@@ -10,6 +10,9 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_URL =
+  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000';
+
 const Signup = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -42,7 +45,7 @@ const Signup = () => {
 
     try {
       // Axios request ko FormData ke saath bhejein
-      await axios.post('http://localhost:5000/api/users/register', formData, {
+      await axios.post(`${API_URL}/api/users/register`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
