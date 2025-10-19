@@ -38,6 +38,7 @@ import Header from './components/header';
 import Login from './pages/login';
 import Signup from './pages/signup';
 import Profile from './pages/profile';
+import ProductPage from './pages/productpage'; // Yahan page import ho raha hai
 import axios from 'axios';
 
 const API_URL =
@@ -60,7 +61,6 @@ function App() {
 
       if (token) {
         try {
-          // Token verify karke user data get karein
           const userRes = await axios.get(`${API_URL}/api/users/`, {
             headers: { 'x-auth-token': token },
           });
@@ -69,7 +69,6 @@ function App() {
             user: userRes.data,
           });
 
-          // User ka cart bhi database se fetch karein
           const cartRes = await axios.get(`${API_URL}/api/cart/`, {
             headers: { 'x-auth-token': token },
           });
@@ -99,19 +98,26 @@ function App() {
           path="/shop"
           element={<ShoppingContent setCart={setCart} userData={userData} />}
         />
+
+        {/* YEH ROUTE AB PRODUCT PAGE DIKHAYEGA */}
+        <Route
+          path="/product/:id"
+          element={<ProductPage setCart={setCart} userData={userData} />}
+        />
+
         <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/aboutus" element={<AboutUs />} />
-
-        {/* Yahan setCart ko Login component mein pass karein */}
         <Route
           path="/login"
           element={<Login setUserData={setUserData} setCart={setCart} />}
         />
-
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile userData={userData} />} />
+
+        {/* Agar koi aur URL ho to Not Found page aayega */}
         <Route path="*" element={<NotFound />} />
+
         <Route path="/checkout" element={<CheckoutPage cart={cart} />} />
       </Routes>
     </>

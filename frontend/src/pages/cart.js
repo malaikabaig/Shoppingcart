@@ -7,6 +7,7 @@ import {
   Paper,
   Divider,
   IconButton,
+  Grid,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -29,10 +30,7 @@ export default function Cart({ cart, setCart }) {
     setSubtotal(total);
   }, [cart]);
 
-  // --- NAYE AUR UPDATED CART FUNCTIONS JO BACKEND SE BAAT KARTE HAIN ---
-
   const updateCartInDB = async (productId, quantity) => {
-    // Agar quantity 0 se kam ho jaye to item remove kar do
     if (quantity < 1) {
       handleRemoveItem(productId);
       return;
@@ -64,6 +62,23 @@ export default function Cart({ cart, setCart }) {
     }
   };
 
+  const handleClearCart = async () => {
+    try {
+      const token = localStorage.getItem('auth-token');
+      // Iske liye backend mein /api/cart/clear route hona chahiye
+      await axios.post(
+        `${API_URL}/api/cart/clear`,
+        {},
+        {
+          headers: { 'x-auth-token': token },
+        }
+      );
+      setCart([]);
+    } catch (err) {
+      console.error('Failed to clear cart', err);
+    }
+  };
+
   const handleIncreaseQuantity = (productId) => {
     const item = cart.find((p) => p.productId === productId);
     if (item) {
@@ -78,132 +93,171 @@ export default function Cart({ cart, setCart }) {
     }
   };
 
-  const handleClearCart = () => {
-    // Iske liye bhi aek backend route ban sakta hai, فی الحال yeh local hai.
-    setCart([]);
-  };
-
   return (
-    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-      <Paper elevation={3} sx={{ p: { xs: 2, md: 4 } }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Your Cart
-        </Typography>
-        <Divider sx={{ mb: 3 }} />
+    <Box
+      sx={{
+        minHeight: 'calc(100vh - 64px)',
+        p: { xs: 2, sm: 4 },
+        background: 'linear-gradient(45deg, #f3e5f5 30%, #e1bee7 90%)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start', // Items top se start honge
+      }}
+    >
+      <Container maxWidth="lg">
+        <Paper
+          elevation={6}
+          sx={{
+            borderRadius: '12px',
+            p: { xs: 2, sm: 4 },
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            backdropFilter: 'blur(10px)',
+          }}
+        >
+          <Typography
+            variant="h4"
+            component="h1"
+            gutterBottom
+            sx={{ fontWeight: 'bold' }}
+          >
+            Shopping Cart
+          </Typography>
+          <Divider sx={{ mb: 3 }} />
 
-        {cart && cart.length > 0 ? (
-          <>
-            {cart.map((item, index) => (
-              <React.Fragment key={item.productId}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    flexDirection: { xs: 'column', sm: 'row' },
-                    mb: 2,
-                  }}
-                >
-                  <img
-                    src={productImages[item.image]}
-                    alt={item.title}
-                    style={{
-                      width: '100px',
-                      height: '100px',
-                      objectFit: 'cover',
-                      marginRight: '16px',
-                      borderRadius: '8px',
-                    }}
-                  />
-                  <Box
-                    sx={{ flexGrow: 1, width: '100%', mt: { xs: 2, sm: 0 } }}
+          {cart && cart.length > 0 ? (
+            <>
+              {cart.map((item) => (
+                <React.Fragment key={item.productId}>
+                  <Grid
+                    container
+                    alignItems="center"
+                    spacing={2}
+                    sx={{ mb: 2 }}
                   >
-                    <Typography variant="h6">{item.title}</Typography>
-                    <Typography variant="body1">
-                      ${item.price.toFixed(2)}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      my: { xs: 2, sm: 0 },
-                    }}
-                  >
-                    <IconButton
-                      onClick={() => handleDecreaseQuantity(item.productId)}
+                    <Grid item xs={12} sm={2} md={1}>
+                      <img
+                        src={productImages[item.image]}
+                        alt={item.title}
+                        style={{ width: '100%', borderRadius: '8px' }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={4} md={5}>
+                      <Typography
+                        variant="h6"
+                        sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
+                      >
+                        {item.title}
+                      </Typography>
+                      <Typography variant="body1">
+                        ${item.price.toFixed(2)}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={6}
+                      sm={3}
+                      md={3}
+                      sx={{ display: 'flex', alignItems: 'center' }}
                     >
-                      <RemoveIcon />
-                    </IconButton>
-                    <Typography sx={{ mx: 2 }}>{item.quantity}</Typography>
-                    <IconButton
-                      onClick={() => handleIncreaseQuantity(item.productId)}
-                    >
-                      <AddIcon />
-                    </IconButton>
-                  </Box>
-                  <Typography
-                    variant="h6"
-                    sx={{ width: '100px', textAlign: 'right', mx: 2 }}
-                  >
-                    ${(item.price * item.quantity).toFixed(2)}
-                  </Typography>
-                  <IconButton
-                    color="error"
-                    onClick={() => handleRemoveItem(item.productId)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
-                {index < cart.length - 1 && <Divider sx={{ my: 2 }} />}
-              </React.Fragment>
-            ))}
-            <Divider sx={{ my: 3 }} />
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={handleClearCart}
+                      <IconButton
+                        size="small"
+                        onClick={() => handleDecreaseQuantity(item.productId)}
+                      >
+                        <RemoveIcon />
+                      </IconButton>
+                      <Typography sx={{ mx: 2 }}>{item.quantity}</Typography>
+                      <IconButton
+                        size="small"
+                        onClick={() => handleIncreaseQuantity(item.productId)}
+                      >
+                        <AddIcon />
+                      </IconButton>
+                    </Grid>
+                    <Grid item xs={4} sm={2} md={2} sx={{ textAlign: 'right' }}>
+                      <Typography
+                        variant="h6"
+                        sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
+                      >
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={2} sm={1} md={1} sx={{ textAlign: 'right' }}>
+                      <IconButton
+                        color="error"
+                        onClick={() => handleRemoveItem(item.productId)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Grid>
+                  </Grid>
+                  <Divider sx={{ my: 2 }} />
+                </React.Fragment>
+              ))}
+
+              <Box
+                sx={{
+                  mt: 3,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  flexDirection: { xs: 'column', sm: 'row' },
+                }}
               >
-                Clear Cart
-              </Button>
-              <Box sx={{ textAlign: 'right' }}>
-                <Typography variant="h5">
-                  Subtotal: ${subtotal.toFixed(2)}
-                </Typography>
                 <Button
-                  component={Link}
-                  to="/checkout"
-                  variant="contained"
-                  color="primary"
-                  sx={{ mt: 1 }}
+                  variant="outlined"
+                  color="error"
+                  onClick={handleClearCart}
+                  sx={{ mb: { xs: 2, sm: 0 } }}
                 >
-                  Proceed to Checkout
+                  Clear Cart
                 </Button>
+                <Box sx={{ textAlign: 'right' }}>
+                  <Typography variant="h5">
+                    Subtotal: ${subtotal.toFixed(2)}
+                  </Typography>
+                  <Button
+                    component={Link}
+                    to="/checkout"
+                    variant="contained"
+                    size="large"
+                    sx={{
+                      mt: 1,
+                      py: 1,
+                      px: 4,
+                      borderRadius: '50px',
+                      backgroundColor: '#212121',
+                      '&:hover': { backgroundColor: '#424242' },
+                    }}
+                  >
+                    Checkout
+                  </Button>
+                </Box>
               </Box>
+            </>
+          ) : (
+            <Box sx={{ textAlign: 'center', py: 5 }}>
+              <Typography variant="h6" color="textSecondary" sx={{ mb: 3 }}>
+                Your cart is empty.
+              </Typography>
+              <Button
+                component={Link}
+                to="/shop"
+                variant="contained"
+                size="large"
+                sx={{
+                  borderRadius: '50px',
+                  py: 1.5,
+                  px: 5,
+                  backgroundColor: '#212121',
+                  '&:hover': { backgroundColor: '#424242' },
+                }}
+              >
+                Continue Shopping
+              </Button>
             </Box>
-          </>
-        ) : (
-          <Box sx={{ textAlign: 'center', py: 5 }}>
-            <Typography variant="h6" color="text.secondary">
-              Your cart is empty.
-            </Typography>
-            <Button
-              component={Link}
-              to="/shop"
-              variant="contained"
-              sx={{ mt: 2 }}
-            >
-              Continue Shopping
-            </Button>
-          </Box>
-        )}
-      </Paper>
-    </Container>
+          )}
+        </Paper>
+      </Container>
+    </Box>
   );
 }
