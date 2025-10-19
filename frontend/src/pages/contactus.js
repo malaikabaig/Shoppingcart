@@ -7,7 +7,6 @@ import {
   Grid,
   Container,
   Paper,
-  Icon,
 } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
