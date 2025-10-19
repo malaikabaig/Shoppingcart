@@ -237,16 +237,15 @@ const Navbar = ({ cart, setCart, userData, setUserData }) => {
     <>
       <AppBar
         position="static"
-        // color="transparent" <-- YEH LINE HATA DI HAI
         elevation={1}
         sx={{
-          background: 'linear-gradient(45deg, #f3e5f5 30%, #ba90c1ff 90%)',
+          background: 'linear-gradient(45deg, #43184aff 30%, #d0bad4ff 90%)',
         }}
       >
         <Toolbar
           sx={{
             justifyContent: 'space-between',
-            // Toolbar transparent hi rahega taake AppBar ka color nazar aaye
+
             backgroundColor: 'transparent',
           }}
         >
@@ -285,7 +284,7 @@ const Navbar = ({ cart, setCart, userData, setUserData }) => {
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton color="inherit" onClick={handleDrawerToggle}>
               <Badge badgeContent={calculateTotalQuantity()} color="error">
-                <ShoppingCartIcon />
+                <ShoppingCartIcon sx={{ color: '#43184aff' }} />
               </Badge>
             </IconButton>
             {userData && userData.user ? (
@@ -307,10 +306,20 @@ const Navbar = ({ cart, setCart, userData, setUserData }) => {
               </>
             ) : (
               <>
-                <Button color="inherit" component={Link} to="/login">
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/login"
+                  sx={{ color: '#43184aff' }}
+                >
                   Login
                 </Button>
-                <Button color="inherit" component={Link} to="/signup">
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/signup"
+                  sx={{ color: '#43184aff' }}
+                >
                   Signup
                 </Button>
               </>

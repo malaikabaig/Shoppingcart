@@ -105,9 +105,14 @@ export default function AboutUs() {
           </Grid>
           <Grid item xs={12} md={6}>
             <Box
-              sx={{ border: '1px solid #e0e0e0', borderRadius: '12px', p: 3.5 }}
+              sx={{
+                border: '2px solid #502c57ff',
+                borderRadius: '12px',
+                p: 3.5,
+                backgroundColor: '#e1bee7',
+              }}
             >
-              <Typography variant="h4" sx={{ fontWeight: 500 }}>
+              <Typography variant="h4" sx={{ fontWeight: 500, mb: 3 }}>
                 Our Core Values
               </Typography>
               <List>
