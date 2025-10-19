@@ -13,11 +13,9 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-// Data wapas utils folder se import karein
 import productData from '../utils/products.json';
 import { productImages } from '../images/images';
 
-// Define animations using keyframes
 const fadeIn = keyframes`
   from {
     opacity: 0;
